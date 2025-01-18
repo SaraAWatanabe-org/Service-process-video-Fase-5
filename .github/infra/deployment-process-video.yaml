@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: process-video
+spec: 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: process-video
+  template:
+    metadata:
+      labels:
+        app: process-video
+    spec:
+      containers:
+      - name: process-video
+        image: saraaw/service-process-video:latest
+        ports:
+        - containerPort: 8081
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+          secretKeyRef:
+            name: aws-credentials
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: AWS_SECRET_ACCESS_KEY
+        - name: S3_BUCKET_NAME
+          value: <your-s3-bucket-name>
+        - name: SQS_QUEUE_URL
+          value: <your-sqs-queue-url>
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "125m"
+          limits:
+            memory: "256Mi"
+            cpu: "250m" 
+        
