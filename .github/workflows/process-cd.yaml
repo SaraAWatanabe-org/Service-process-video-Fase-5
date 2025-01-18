@@ -27,7 +27,7 @@ jobs:
         run: aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }} --region ${{ env.REGION_DEFAULT }}
 
       - name: Kube Apply App
-        run: kubectl apply  infra/deployment-in-out.yaml
+        run: kubectl apply  infra/deployment-process-video.yaml
    
       
    
