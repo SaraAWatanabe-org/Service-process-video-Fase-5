@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: process-video
+  namespace: my-namespace
 spec: 
   replicas: 1
   selector:
@@ -20,22 +21,28 @@ spec:
         env:
         - name: AWS_ACCESS_KEY_ID
           valueFrom:
-          secretKeyRef:
-            name: aws-credentials
+            secretKeyRef:
+              name: aws-credentials
+              key: AWS_ACCESS_KEY_ID
         - name: AWS_SECRET_ACCESS_KEY
           valueFrom:
             secretKeyRef:
               name: aws-credentials
               key: AWS_SECRET_ACCESS_KEY
         - name: S3_BUCKET_NAME
-          value: <your-s3-bucket-name>
+          valueFrom:
+            configMapKeyRef:
+              name: config-process-video
+              key: S3_BUCKET_NAME
         - name: SQS_QUEUE_URL
-          value: <your-sqs-queue-url>
+          valueFrom:
+            configMapKeyRef:
+              name: config-process-video
+              key: SQS_QUEUE_URL
         resources:
           requests:
             memory: "128Mi"
             cpu: "125m"
           limits:
             memory: "256Mi"
-            cpu: "250m" 
-        
+            cpu: "250m"
