@@ -1,7 +1,10 @@
 package com.service.process.video.framework;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.process.video.interfaceadapters.controller.VideoProcessorController;
 import com.service.process.video.interfaceadapters.interfaces.QueueClientAdapter;
+import com.service.process.video.usecases.Payload;
 import io.awspring.cloud.messaging.listener.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,15 +42,18 @@ public class SQSClientAdapter implements QueueClientAdapter {
 
     @SqsListener("nome-da-fila-sqs")
     public void readMessagesFromSqs(String message) throws IOException {
-
         videoProcessorController.processMessage(message);
     }
 
-    public void sendSQS(String message) {
+    public void sendSQS(Payload payload) throws JsonProcessingException {
         // Envia a mensagem para a fila SQS
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(payload);
+
         SendMessageRequest request = SendMessageRequest.builder()
                 .queueUrl(outputQueueUrl)
-                .messageBody(message)
+                .messageBody(json)
                 .build();
 
         sqsClient.sendMessage(request);

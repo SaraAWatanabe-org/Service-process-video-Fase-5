@@ -1,5 +1,6 @@
 package com.service.process.video.usecases;
 
+import com.service.process.video.framework.S3ClientAdapter;
 import com.service.process.video.interfaceadapters.interfaces.QueueClientAdapter;
 import net.bramp.ffmpeg.FFmpeg;
 import net.bramp.ffmpeg.FFmpegExecutor;
@@ -24,9 +25,11 @@ public class FrameZip {
     private static final String DOWNLOAD_DIR = "downloads";
 
     private final QueueClientAdapter queueClientAdapter;
+    private final S3ClientAdapter s3ClientAdapter;
 
 
-    public FrameZip(QueueClientAdapter queueClientAdapter) throws IOException {
+    public FrameZip(QueueClientAdapter queueClientAdapter, S3ClientAdapter s3ClientAdapter) throws IOException {
+        this.s3ClientAdapter = s3ClientAdapter;
         // Inicializa os diretórios locais
         Files.createDirectories(Paths.get(OUTPUT_DIR));
         Files.createDirectories(Paths.get(DOWNLOAD_DIR));
@@ -86,14 +89,10 @@ public class FrameZip {
         return zipFile;
     }
 
-    public void sendZipToSqs(File zipFile) {
+    public void sendToS3AndSqs(File zipFile,Payload payload) throws IOException {
         // Cria uma mensagem com metadados do arquivo ZIP
-        String message = String.format(
-                "ZIP file created: %s\nSize: %d bytes\nPath: %s",
-                zipFile.getName(),
-                zipFile.length(),
-                zipFile.getAbsolutePath()
-        );
+
+        Payload message = s3ClientAdapter.uploadVideoFromS3(zipFile,payload);
 
         queueClientAdapter.sendSQS(message);
     }
