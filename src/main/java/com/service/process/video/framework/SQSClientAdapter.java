@@ -31,15 +31,6 @@ public class SQSClientAdapter implements QueueClientAdapter {
     private VideoProcessorService videoProcessorController;
 
 
-    public SQSClientAdapter() throws IOException {
-
-        // Configura o cliente SQS
-        this.sqsClient = SqsClient.builder()
-                .region(Region.US_EAST_1)
-                .credentialsProvider(DefaultCredentialsProvider.create())
-                .build();
-    }
-
     @SqsListener("nome-da-fila-sqs")
     public void readMessagesFromSqs(String message) throws IOException {
         videoProcessorController.processMessage(message);

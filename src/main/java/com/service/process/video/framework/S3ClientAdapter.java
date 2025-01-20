@@ -22,7 +22,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class S3ClientAdapter implements StorageClientAdapter {
 
-    private S3Client s3Client;
+    private final S3Client s3Client;
 
     @Value("${aws.s3.bucket-name}")
     private String bucketName;

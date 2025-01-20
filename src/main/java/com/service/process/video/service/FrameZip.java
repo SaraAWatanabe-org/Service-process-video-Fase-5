@@ -39,8 +39,8 @@ public class FrameZip {
 
     public File processVideo(Path videoPath) throws IOException {
         // Caminhos para os executáveis do FFmpeg e FFprobe
-        FFmpeg ffmpeg = new FFmpeg("/path/to/ffmpeg");
-        FFprobe ffprobe = new FFprobe("/path/to/ffprobe");
+        FFmpeg ffmpeg = new FFmpeg("C:\\Users\\jequelia\\fiap\\video\\ffmpeg-2025-01-15-git-4f3c9f2f03-full_build\\bin\\ffmpeg.exe");
+        FFprobe ffprobe = new FFprobe("C:\\Users\\jequelia\\fiap\\video\\ffmpeg-2025-01-15-git-4f3c9f2f03-full_build\\bin\\ffprobe.exe");
 
         // Configura FFmpeg para extrair frames
         FFmpegBuilder builder = new FFmpegBuilder()
