@@ -1,17 +1,15 @@
-package com.service.process.video.interfaceadapters.controller;
+package com.service.process.video.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.process.video.interfaceadapters.interfaces.QueueClientAdapter;
-import com.service.process.video.interfaceadapters.interfaces.StorageClientAdapter;
-
-import com.service.process.video.usecases.FrameZip;
-import com.service.process.video.usecases.Payload;
+import com.service.process.video.interfaceadapters.QueueClientAdapter;
+import com.service.process.video.interfaceadapters.StorageClientAdapter;
+import com.service.process.video.service.model.Payload;
 
 
 import java.io.*;
 import java.nio.file.*;
 
-public class VideoProcessorController {
+public class VideoProcessorService {
 
     private static final String OUTPUT_DIR = "output";
     private static final String DOWNLOAD_DIR = "downloads";
@@ -24,7 +22,7 @@ public class VideoProcessorController {
 
     private final FrameZip frameZip;
 
-    public VideoProcessorController(ObjectMapper objectMapper, QueueClientAdapter queueClientAdapter, StorageClientAdapter storageClientAdapte, FrameZip frameZip) throws IOException {
+    public VideoProcessorService(ObjectMapper objectMapper, QueueClientAdapter queueClientAdapter, StorageClientAdapter storageClientAdapte, FrameZip frameZip) throws IOException {
         // Inicializa os diretórios locais
         Files.createDirectories(Paths.get(OUTPUT_DIR));
         Files.createDirectories(Paths.get(DOWNLOAD_DIR));
@@ -36,7 +34,6 @@ public class VideoProcessorController {
     }
 
     public void processMessage(String message) throws IOException {
-
 
         Payload payload = objectMapper.readValue(message, Payload.class);
 
@@ -50,9 +47,11 @@ public class VideoProcessorController {
         // Processa o vídeo e gera o arquivo .zip
         File zipFile = frameZip.processVideo(videoPath);
 
-        // Envia o .zip para a fila SQS
-        frameZip.sendToS3AndSqs(zipFile,payload);
+        // Envia o .zip para o S3
+        Payload payloadS3Zip = storageClientAdapter.uploadVideoFromS3(zipFile,payload);
 
+        // Envia o payload para a fila SQS
+        queueClientAdapter.sendSQS(payloadS3Zip);
 
         System.out.println("Finished processing video: " + payload.getS3Key());
     }

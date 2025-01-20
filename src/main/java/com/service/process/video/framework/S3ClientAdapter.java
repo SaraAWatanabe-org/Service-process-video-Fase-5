@@ -1,7 +1,7 @@
 package com.service.process.video.framework;
 
-import com.service.process.video.interfaceadapters.interfaces.StorageClientAdapter;
-import com.service.process.video.usecases.Payload;
+import com.service.process.video.interfaceadapters.StorageClientAdapter;
+import com.service.process.video.service.model.Payload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

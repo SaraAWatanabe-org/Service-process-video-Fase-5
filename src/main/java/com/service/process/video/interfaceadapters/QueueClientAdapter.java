@@ -1,11 +1,9 @@
-package com.service.process.video.interfaceadapters.interfaces;
+package com.service.process.video.interfaceadapters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.service.process.video.usecases.Payload;
-import software.amazon.awssdk.services.sqs.model.Message;
+import com.service.process.video.service.model.Payload;
 
 import java.io.IOException;
-import java.util.List;
 
 public interface QueueClientAdapter {
 

@@ -2,9 +2,9 @@ package com.service.process.video.framework;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.process.video.interfaceadapters.controller.VideoProcessorController;
-import com.service.process.video.interfaceadapters.interfaces.QueueClientAdapter;
-import com.service.process.video.usecases.Payload;
+import com.service.process.video.service.VideoProcessorService;
+import com.service.process.video.interfaceadapters.QueueClientAdapter;
+import com.service.process.video.service.model.Payload;
 import io.awspring.cloud.messaging.listener.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +28,7 @@ public class SQSClientAdapter implements QueueClientAdapter {
     @Value("${aws.sqs.output-queue-url}")
     private String outputQueueUrl;
 
-    private VideoProcessorController videoProcessorController;
+    private VideoProcessorService videoProcessorController;
 
 
     public SQSClientAdapter() throws IOException {
@@ -60,7 +60,6 @@ public class SQSClientAdapter implements QueueClientAdapter {
     }
 
     public void removeMensageSqs(String message) {
-        // Remove a mensagem da fila
         sqsClient.deleteMessage(b -> b.queueUrl(inputQueueUrl).receiptHandle(message));
     }
 

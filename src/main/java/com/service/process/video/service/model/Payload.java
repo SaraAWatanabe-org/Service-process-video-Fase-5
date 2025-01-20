@@ -1,4 +1,4 @@
-package com.service.process.video.usecases;
+package com.service.process.video.service.model;
 
 import java.util.UUID;
 

@@ -1,7 +1,6 @@
-package com.service.process.video.interfaceadapters.interfaces;
+package com.service.process.video.interfaceadapters;
 
-import com.service.process.video.usecases.Payload;
-import org.springframework.web.multipart.MultipartFile;
+import com.service.process.video.service.model.Payload;
 
 import java.io.File;
 import java.io.IOException;
