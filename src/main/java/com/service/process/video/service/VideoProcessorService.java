@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.process.video.interfaceadapters.QueueClientAdapter;
 import com.service.process.video.interfaceadapters.StorageClientAdapter;
 import com.service.process.video.service.model.Payload;
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
 
 
@@ -52,6 +53,9 @@ public class VideoProcessorService {
 
         // Envia o payload para a fila SQS
         queueClientAdapter.sendSQS(payloadS3Zip);
+
+        // Limpeza dos arquivos temporários (frames)
+        FileUtils.cleanDirectory(new File(OUTPUT_DIR));
 
         System.out.println("Finished processing video: " + payload.getS3Key());
     }

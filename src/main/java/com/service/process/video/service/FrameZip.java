@@ -76,8 +76,7 @@ public class FrameZip {
             }
         }
 
-        // Limpeza dos arquivos temporários (frames)
-        FileUtils.cleanDirectory(new File(OUTPUT_DIR));
+
 
         return zipFile;
     }

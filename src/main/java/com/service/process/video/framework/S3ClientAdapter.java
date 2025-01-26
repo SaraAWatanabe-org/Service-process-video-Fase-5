@@ -24,8 +24,8 @@ public class S3ClientAdapter implements StorageClientAdapter {
 
     private final S3Client s3Client;
 
-    @Value("${aws.s3.bucket-name}")
-    private String bucketName;
+
+    private final String bucketName = "soat-storage";
 
 
     public Path downloadVideoFromS3(String s3Key,Path videoPath) throws IOException {
@@ -40,11 +40,21 @@ public class S3ClientAdapter implements StorageClientAdapter {
             inputStream.transferTo(outputStream);
         }
 
+        Path directory = videoPath.getParent();
+        if (!Files.exists(directory)) {
+            Files.createDirectories(directory);
+        }
+
+        try (InputStream inputStream = s3Client.getObject(getObjectRequest);
+             OutputStream outputStream = Files.newOutputStream(videoPath)) {
+            inputStream.transferTo(outputStream);
+        }
+
         return videoPath;
     }
 
     public Payload uploadVideoFromS3(File file,Payload payload) throws IOException {
-        String key = buildS3Key("exampleUser@example.com", file.getName());
+        String key = buildS3Key(payload.getEmail(), file.getName());
 
         // Upload para o S3
         s3Client.putObject(PutObjectRequest.builder()
@@ -64,6 +74,6 @@ public class S3ClientAdapter implements StorageClientAdapter {
 
     private String buildS3Key(String userName, String originalFilename) {
         LocalDate now = LocalDate.now();
-        return String.format("%s/%d/%02d/%02d/%s", userName, now.getYear(), now.getMonthValue(), now.getDayOfMonth(), originalFilename);
+        return String.format("%s-%d-%02d-%02d-%s", userName, now.getYear(), now.getMonthValue(), now.getDayOfMonth(), originalFilename);
     }
 }
