@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.process.video.interfaceadapters.QueueClientAdapter;
 import com.service.process.video.interfaceadapters.StorageClientAdapter;
 import com.service.process.video.service.model.Payload;
+import org.springframework.stereotype.Component;
 
 
 import java.io.*;
 import java.nio.file.*;
 
+@Component
 public class VideoProcessorService {
 
     private static final String OUTPUT_DIR = "output";

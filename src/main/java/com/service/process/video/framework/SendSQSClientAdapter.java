@@ -2,39 +2,23 @@ package com.service.process.video.framework;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.service.process.video.service.VideoProcessorService;
 import com.service.process.video.interfaceadapters.QueueClientAdapter;
 import com.service.process.video.service.model.Payload;
-import io.awspring.cloud.messaging.listener.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
-import java.io.IOException;
-
 @Component
 @RequiredArgsConstructor
-public class SQSClientAdapter implements QueueClientAdapter {
+public class SendSQSClientAdapter implements QueueClientAdapter {
 
     private final SqsClient sqsClient;
 
-    @Value("${aws.sqs.input-queue-url}")
-    private String inputQueueUrl;
-
-    @Value("${aws.sqs.output-queue-url}")
+    @Value("${aws.sqs.endpoint-notifier}")
     private String outputQueueUrl;
 
-    private VideoProcessorService videoProcessorController;
-
-
-    @SqsListener("nome-da-fila-sqs")
-    public void readMessagesFromSqs(String message) throws IOException {
-        videoProcessorController.processMessage(message);
-    }
 
     public void sendSQS(Payload payload) throws JsonProcessingException {
         // Envia a mensagem para a fila SQS
@@ -50,9 +34,7 @@ public class SQSClientAdapter implements QueueClientAdapter {
         sqsClient.sendMessage(request);
     }
 
-    public void removeMensageSqs(String message) {
-        sqsClient.deleteMessage(b -> b.queueUrl(inputQueueUrl).receiptHandle(message));
-    }
+
 
 
 

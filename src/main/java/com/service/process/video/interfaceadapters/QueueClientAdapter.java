@@ -7,7 +7,5 @@ import java.io.IOException;
 
 public interface QueueClientAdapter {
 
-    void removeMensageSqs(String message);
     void sendSQS(Payload message) throws JsonProcessingException;
-    void readMessagesFromSqs(String message) throws IOException;
 }
