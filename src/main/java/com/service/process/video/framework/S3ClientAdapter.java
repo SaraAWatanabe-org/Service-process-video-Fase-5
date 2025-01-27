@@ -3,6 +3,8 @@ package com.service.process.video.framework;
 import com.service.process.video.interfaceadapters.StorageClientAdapter;
 import com.service.process.video.service.model.Payload;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +23,9 @@ import java.time.LocalDate;
 @Component
 @RequiredArgsConstructor
 public class S3ClientAdapter implements StorageClientAdapter {
+    Logger log = LoggerFactory.getLogger(S3ClientAdapter.class);
 
     private final S3Client s3Client;
-
-
     private final String bucketName = "soat-storage";
 
 
@@ -35,38 +36,47 @@ public class S3ClientAdapter implements StorageClientAdapter {
                 .key(s3Key)
                 .build();
 
-        try (InputStream inputStream = s3Client.getObject(getObjectRequest);
-             OutputStream outputStream = Files.newOutputStream(videoPath)) {
-            inputStream.transferTo(outputStream);
-        }
+        try {
+            Path directory = videoPath.getParent();
+            if (!Files.exists(directory)) {
+                Files.createDirectories(directory);
+            }
 
-        Path directory = videoPath.getParent();
-        if (!Files.exists(directory)) {
-            Files.createDirectories(directory);
-        }
+            try (InputStream inputStream = s3Client.getObject(getObjectRequest);
+                 OutputStream outputStream = Files.newOutputStream(videoPath)) {
+                inputStream.transferTo(outputStream);
+            }
 
-        try (InputStream inputStream = s3Client.getObject(getObjectRequest);
-             OutputStream outputStream = Files.newOutputStream(videoPath)) {
-            inputStream.transferTo(outputStream);
+            log.info("Video downloaded successfully from S3 with key: {}", s3Key);
+        } catch (Exception e) {
+            log.error("Error downloading video from S3 with key: {}", s3Key, e);
+            throw e;
         }
-
         return videoPath;
     }
 
-    public Payload uploadVideoFromS3(File file,Payload payload) throws IOException {
+    public Payload uploadVideoFromS3(File file, Payload payload)  {
+
         String key = buildS3Key(payload.getEmail(), file.getName());
 
-        // Upload para o S3
-        s3Client.putObject(PutObjectRequest.builder()
-                        .bucket(bucketName)
-                        .key(key)
-                        .build(),
-                file.toPath());
+        try {
+            // Upload para o S3
+            s3Client.putObject(PutObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(key)
+                            .build(),
+                    file.toPath());
 
-        // Construir a URL de acesso do objeto S3
-        String fileUrl = s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(key)).toExternalForm();
-        payload.setUrl(fileUrl);
-        payload.setS3Key(key);
+            // Construir a URL de acesso do objeto S3
+            String fileUrl = s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(key)).toExternalForm();
+            payload.setUrl(fileUrl);
+            payload.setS3Key(key);
+
+            log.info("File uploaded successfully to S3 with key: {}", key);
+        } catch (Exception e) {
+            log.error("Error uploading file to S3 with key: {}", key, e);
+            throw e;
+        }
 
         return payload;
     }

@@ -3,8 +3,12 @@ package com.service.process.video.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.process.video.interfaceadapters.QueueClientAdapter;
 import com.service.process.video.interfaceadapters.StorageClientAdapter;
+import com.service.process.video.service.enums.NotificationType;
+import com.service.process.video.service.model.Notification;
 import com.service.process.video.service.model.Payload;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 
@@ -16,6 +20,7 @@ public class VideoProcessorService {
 
     private static final String OUTPUT_DIR = "output";
     private static final String DOWNLOAD_DIR = "downloads";
+    Logger log = LoggerFactory.getLogger(VideoProcessorService.class);
 
 
     private final QueueClientAdapter queueClientAdapter;
@@ -35,33 +40,55 @@ public class VideoProcessorService {
     }
 
     public void processMessage(String message) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Payload payload = objectMapper.readValue(message, Payload.class);
+        try {
 
-        System.out.println("Processing video with S3 Key: " + payload.getS3Key());
+            ObjectMapper objectMapper = new ObjectMapper();
+            Payload payload = objectMapper.readValue(message, Payload.class);
 
-        Path path = Paths.get(DOWNLOAD_DIR, payload.getS3Key());
+            log.info("Processing video with S3 Key: {}", payload.getS3Key());
 
-        // Baixa o vídeo do S3
-        Path videoPath = storageClientAdapter.downloadVideoFromS3(payload.getS3Key(),path);
+            Path path = Paths.get(DOWNLOAD_DIR, payload.getS3Key());
 
-        // Processa o vídeo e gera o arquivo .zip
-        File zipFile = frameZip.processVideo(videoPath);
+            // Baixa o vídeo do S3
+            Path videoPath = storageClientAdapter.downloadVideoFromS3(payload.getS3Key(), path);
 
-        // Envia o .zip para o S3
-        Payload payloadS3Zip = storageClientAdapter.uploadVideoFromS3(zipFile,payload);
+            // Processa o vídeo e gera o arquivo .zip
+            File zipFile = frameZip.processVideo(videoPath);
 
-        // Envia o payload para a fila SQS
-        queueClientAdapter.sendSQS(payloadS3Zip);
+            // Envia o .zip para o S3
+            Payload payloadS3Zip = storageClientAdapter.uploadVideoFromS3(zipFile, payload);
 
-        // Limpeza dos arquivos temporários (frames)
-        FileUtils.cleanDirectory(new File(OUTPUT_DIR));
+            Notification notification = getNotification(payload, NotificationType.SUCCESS);
 
-        System.out.println("Finished processing video: " + payload.getS3Key());
+            // Envia o payload para a fila SQS
+            queueClientAdapter.sendSQS(notification);
+
+            // Limpeza dos arquivos temporários (frames)
+            FileUtils.cleanDirectory(new File(OUTPUT_DIR));
+
+            log.info("Finished processing video: {}", payload.getS3Key());
+        } catch (Exception e) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Payload payload = objectMapper.readValue(message, Payload.class);
+
+            Notification notification = getNotification(payload,  NotificationType.ERROR);
+
+            // Envia o payload para a fila SQS
+            queueClientAdapter.sendSQS(notification);
+
+            log.error("Error processing video with S3 Key: {}", payload.getS3Key(), e);
+            throw e;
+        }
     }
 
-
-
+    private static Notification getNotification(Payload payload,NotificationType notificationType) {
+        Notification notification = new Notification();
+        notification.setEmail(payload.getEmail());
+        notification.setBucketAddress(payload.getS3Key());
+        notification.setVideoId(payload.getId());
+        notification.setNotificationType(notificationType);
+        return notification;
+    }
 
 
 }
