@@ -14,21 +14,19 @@ Diagrama de Arquitetura
 
 ### Componentes Principais
 
-AWS Cognito: Gerenciamento de autenticação e autorização dos usuários.
+- AWS Cognito: Gerenciamento de autenticação e autorização dos usuários.
 
-Service Input/Output: Responsável pelo controle de upload de vídeos e comunicação com o banco de dados.
+- Service Input/Output: Responsável pelo controle de upload de vídeos, comunicação com o banco de dados e envio de notificações aos usuários sobre o status dos vídeos
 
-Bucket S3: Armazena os vídeos enviados pelos usuários.
+- Bucket S3: Armazena os vídeos enviados pelos usuários.
 
-Service Process Video: Processa os vídeos após o upload.
+- Service Process Video: Processa os vídeos após o upload.
 
-SQS Process: Fila para gerenciar as mensagens de processamento de vídeo.
+- SQS Process: Fila para gerenciar as mensagens de processamento de vídeo.
 
-SQS Notification: Fila para envio de notificações aos usuários.
+- SQS Notification: Fila para envio de notificações aos usuários.
 
-Service Notification: Responsável por enviar notificações aos usuários sobre o status dos vídeos.
-
-MS SQL: Armazena informações sobre usuários e vídeos.
+- Banco de dados: Armazena informações sobre usuários e vídeos.
 
 ## 3. Microsserviços
 
@@ -57,33 +55,33 @@ Processo: Download do S3, processamento, upload do resultado e atualização do 
 
 ### 5.1 Upload e Processamento de Vídeo
 
-Usuário faz seu cadastro login via Cognito.
+- Usuário faz seu cadastro login via Cognito.
 
-Usuário recebe um e-mail com a notificação.
+- Usuário recebe um e-mail com a notificação.
 
-Usuário envia vídeo através do Service Input/Output.
+- Usuário envia vídeo através do Service Input/Output.
 
-O vídeo é armazenado no S3.
+- O vídeo é armazenado no S3.
 
-Uma mensagem é publicada na fila SQS Process.
+- Uma mensagem é publicada na fila SQS Process.
 
-O Service Process Video consome a mensagem, processa o vídeo e atualiza o status publicando uma mensagem na fila SQS Notification.
+- O Service Process Video consome a mensagem, processa o vídeo e atualiza o status publicando uma mensagem na fila SQS Notification.
 
-O Service Input/Output consome a mensagem e notifica o usuário.
+- O Service Input/Output consome a mensagem e notifica o usuário.
 
-O vídeo processado fica disponível para o usuário no S3.
+- O vídeo processado fica disponível para o usuário no S3.
 
 ## 6. Segurança e LGPD
 
-Autenticação: AWS Cognito para gerenciamento de usuários.
+- Autenticação: AWS Cognito para gerenciamento de usuários.
 
-Autorização: Regras de IAM e políticas de bucket S3.
+- Autorização: Regras de IAM e políticas de bucket S3.
 
-Criptografia: Dados em trânsito e em repouso criptografados.
+- Criptografia: Dados em trânsito e em repouso criptografados.
 
-Proteção de Endpoints: Apenas usuários autenticados podem acessar o sistema.
+- Proteção de Endpoints: Apenas usuários autenticados podem acessar o sistema.
 
-LGPD: ncdjvnjdfnvlkfdnl
+- LGPD: ncdjvnjdfnvlkfdnl
 
 ## 7. Escalabilidade e Resiliência
 
@@ -97,9 +95,11 @@ Arquitetura Desacoplada: Microsserviços independentes que facilitam o escalonam
 
 Versionamento: Código hospedado no GitHub.
 
-[Repositório Service Process Video ](https://github.com/SaraAWatanabe-org/Service-process-video-Fase-5)
-[Repositório Service Input Output](https://github.com/SaraAWatanabe-org/Service-input-output-Fase-5)
-[Repositório Infra](https://github.com/SaraAWatanabe-org/Infra-Fase-5)
+- [Repositório Service Process Video ](https://github.com/SaraAWatanabe-org/Service-process-video-Fase-5)
+
+- [Repositório Service Input Output](https://github.com/SaraAWatanabe-org/Service-input-output-Fase-5)
+
+- [Repositório Infra](https://github.com/SaraAWatanabe-org/Infra-Fase-5)
 
 Pipeline de CI/CD: Automatização de build, testes e deploy utilizando GitHub Actions.
 
