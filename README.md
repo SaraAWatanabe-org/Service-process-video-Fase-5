@@ -22,7 +22,7 @@ Diagrama de Arquitetura
 
 - Service Process Video: Processa os vídeos após o upload.
 
-- SQS Process: Fila para gerenciar as mensagens de processamento de vídeo e de notificações de erro ou sucesso.
+- SQS Process: Fila para gerenciar as mensagens de processamento de vídeo.
 
 - SQS Notification: Fila para envio de notificações aos usuários.
 
