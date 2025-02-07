@@ -10,7 +10,7 @@ O sistema tem como objetivo gerenciar o upload, processamento e notificação de
 
 Diagrama de Arquitetura
 
-(Inserir diagrama  aqui)
+![arquitetura](src/main/resources/diagrama_arq.png)
 
 ### Componentes Principais
 
