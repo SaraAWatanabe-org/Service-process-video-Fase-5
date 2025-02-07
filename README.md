@@ -34,7 +34,11 @@ Diagrama de Arquitetura
 
 Funcionalidade: Autenticação via Cognito, upload de vídeos para o S3, registro no banco de dados, consumo de mensagens da fila SQS Notification e envio notificações (e-mail) aos usuários.
 
+POST /auth/login - Autenticar o usuário
+
 POST /upload - Envia vídeos para o S3
+
+POST /auth/accept-terms - Para aceite dos termos de serviço
 
 GET /videos - Lista vídeos do usuário 
 
