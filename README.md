@@ -24,7 +24,7 @@ Diagrama de Arquitetura
 
 - SQS Process: Fila para gerenciar as mensagens de processamento de vídeo.
 
-- SQS Notification: Fila para envio de notificações aos usuários.
+- SQS Notification: Fila para disparar envio de notificações de erro ou sucesso aos usuários.
 
 - Banco de dados: Armazena informações sobre usuários e vídeos.
 
