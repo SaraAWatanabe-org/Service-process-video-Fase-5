@@ -89,7 +89,7 @@ Processo: Download do S3, processamento, upload do resultado e atualização do 
 
 - Proteção de Endpoints: Apenas usuários autenticados podem acessar o sistema.
 
-- LGPD: ncdjvnjdfnvlkfdnl
+- LGPD: O sistema apenas processa dados pessoais com base em consentimento explícito ou outras bases legais previstas na LGPD.
 
 ## 7. Escalabilidade e Resiliência
 
