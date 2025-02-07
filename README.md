@@ -51,7 +51,7 @@ Processo: Download do S3, processamento, upload do resultado e atualização do 
 
 ## 4. Modelagem de Dados
 
-?????????
+![modelagem](src/main/resources/modelagem_bd.png)
 
 ## 5. Fluxos de Trabalho
 
