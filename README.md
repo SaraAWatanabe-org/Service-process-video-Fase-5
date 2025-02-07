@@ -34,8 +34,6 @@ Diagrama de Arquitetura
 
 Funcionalidade: Autenticação via Cognito, upload de vídeos para o S3, registro no banco de dados, consumo de mensagens da fila SQS Notification e envio notificações (e-mail) aos usuários.
 
-Endpoints: ????????? Colocar?
-
 POST /upload - Envia vídeos para o S3
 
 GET /videos - Lista vídeos do usuário 
@@ -58,6 +56,12 @@ Processo: Download do S3, processamento, upload do resultado e atualização do 
 - Usuário faz seu cadastro login via Cognito.
 
 - Usuário recebe um e-mail com a notificação.
+
+- O sistema solicita o aceite do formulário de consentimento LGPD
+
+- Após o aceite, o campo lgpd_consentimento é atualizado para true no perfil do usuário
+
+- O usuário está apto a realizar o upload de vídeos.
 
 - Usuário envia vídeo através do Service Input/Output.
 
