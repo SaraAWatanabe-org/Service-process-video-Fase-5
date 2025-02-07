@@ -4,7 +4,7 @@ O projeto foi desenvolvido no âmbito da pós graduação em Software Architectu
 
 ## 1. Visão Geral do Sistema
 
-O sistema tem como objetivo gerenciar o upload, processamento e notificação de vídeos para usuários autenticados. Ele é baseado em uma arquitetura de microsserviços utilizando serviços da AWS, como Cognito, S3 e SQS, e um banco de dados MySQL para armazenamento relacional.
+O sistema tem como objetivo gerenciar o upload, processamento e notificação de vídeos para usuários autenticados. Ele é baseado em uma arquitetura de microsserviços utilizando serviços da AWS, como Cognito, S3 e SQS, e um banco de dados Postgres para armazenamento relacional.
 
 ## 2. Arquitetura do Sistema
 
