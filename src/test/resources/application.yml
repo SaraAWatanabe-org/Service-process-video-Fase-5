@@ -1,0 +1,26 @@
+aws:
+  credentials:
+    region: sa-east-1
+  sqs:
+    endpoint: "https://sqs.sa-east-1.amazonaws.com/588738607552/soat_notifier"
+    endpoint-notifier: "https://sqs.sa-east-1.amazonaws.com/588738607552/soat_notifier"
+
+
+
+spring:
+  application:
+    name: demo-s3
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  cloud:
+    aws:
+      credentials:
+        access-key: ${aws.credentials.access-key}
+        secret-key: ${aws.credentials.secret-key}
+      region:
+        static: ${aws.credentials.region}
+server:
+  port: 8081
