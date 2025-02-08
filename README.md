@@ -9,6 +9,7 @@ O sistema tem como objetivo gerenciar o upload, processamento e notificação de
 ## 2. Arquitetura do Sistema
 
 ![Diagrama de Arquitetura](diagrama.webp)
+![Diagrama de Arquitetura](ARQ.webp)
 
 ### Componentes Principais
 
