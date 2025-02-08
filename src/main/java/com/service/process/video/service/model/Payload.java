@@ -7,7 +7,7 @@ public class Payload {
     String email;
     String url;
 
-    String s3Key;
+    String key;
 
     public Payload() {
     }
@@ -16,7 +16,7 @@ public class Payload {
         this.id = id;
         this.email = email;
         this.url = url;
-        this.s3Key = s3Key;
+        this.key = s3Key;
     }
 
     public String getUrl() {
@@ -43,12 +43,12 @@ public class Payload {
         this.id = id;
     }
 
-    public String getS3Key() {
-        return s3Key;
+    public String getKey() {
+        return key;
     }
 
-    public void setS3Key(String s3Key) {
-        this.s3Key = s3Key;
+    public void setKey(String key) {
+        this.key = key;
     }
 
 }
