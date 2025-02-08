@@ -70,7 +70,7 @@ public class S3ClientAdapter implements StorageClientAdapter {
             // Construir a URL de acesso do objeto S3
             String fileUrl = s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(key)).toExternalForm();
             payload.setUrl(fileUrl);
-            payload.setS3Key(key);
+            payload.setKey(key);
 
             log.info("File uploaded successfully to S3 with key: {}", key);
         } catch (Exception e) {

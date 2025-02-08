@@ -45,12 +45,12 @@ public class VideoProcessorService {
             ObjectMapper objectMapper = new ObjectMapper();
             Payload payload = objectMapper.readValue(message, Payload.class);
 
-            log.info("Processing video with S3 Key: {}", payload.getS3Key());
+            log.info("Processing video with S3 Key: {}", payload.getKey());
 
-            Path path = Paths.get(DOWNLOAD_DIR, payload.getS3Key());
+            Path path = Paths.get(DOWNLOAD_DIR, payload.getKey());
 
             // Baixa o vídeo do S3
-            Path videoPath = storageClientAdapter.downloadVideoFromS3(payload.getS3Key(), path);
+            Path videoPath = storageClientAdapter.downloadVideoFromS3(payload.getKey(), path);
 
             // Processa o vídeo e gera o arquivo .zip
             File zipFile = frameZip.processVideo(videoPath);
@@ -66,7 +66,7 @@ public class VideoProcessorService {
             // Limpeza dos arquivos temporários (frames)
             FileUtils.cleanDirectory(new File(OUTPUT_DIR));
 
-            log.info("Finished processing video: {}", payload.getS3Key());
+            log.info("Finished processing video: {}", payload.getKey());
         } catch (Exception e) {
             ObjectMapper objectMapper = new ObjectMapper();
             Payload payload = objectMapper.readValue(message, Payload.class);
@@ -76,15 +76,15 @@ public class VideoProcessorService {
             // Envia o payload para a fila SQS
             queueClientAdapter.sendSQS(notification);
 
-            log.error("Error processing video with S3 Key: {}", payload.getS3Key(), e);
+            log.error("Error processing video with S3 Key: {}", payload.getKey(), e);
             throw e;
         }
     }
 
-    private static Notification getNotification(Payload payload,NotificationType notificationType) {
+    public static Notification getNotification(Payload payload, NotificationType notificationType) {
         Notification notification = new Notification();
         notification.setEmail(payload.getEmail());
-        notification.setBucketAddress(payload.getS3Key());
+        notification.setBucketAddress(payload.getKey());
         notification.setVideoId(payload.getId());
         notification.setNotificationType(notificationType);
         return notification;

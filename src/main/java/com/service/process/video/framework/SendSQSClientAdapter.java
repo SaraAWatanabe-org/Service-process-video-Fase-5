@@ -36,7 +36,7 @@ public class SendSQSClientAdapter implements QueueClientAdapter {
                     .build();
 
             sqsClient.sendMessage(request);
-            log.info("Message sent successfully to SQS with payload: {}", payload);
+            log.info("Message sent successfully to SQS with payload: {}", json);
         } catch (Exception e) {
             log.error("Error sending message to SQS with payload: {}", payload, e);
             throw e;
