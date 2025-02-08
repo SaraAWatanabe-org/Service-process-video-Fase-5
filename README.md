@@ -4,7 +4,7 @@ O projeto foi desenvolvido no âmbito da pós graduação em Software Architectu
 
 ## 1. Visão Geral do Sistema
 
-O sistema tem como objetivo gerenciar o upload, processamento e notificação de vídeos para usuários autenticados. Ele é baseado em uma arquitetura de microsserviços utilizando serviços da AWS, como Cognito, S3 e SQS, e um banco de dados MySQL para armazenamento relacional.
+O sistema tem como objetivo gerenciar o upload, processamento e notificação de vídeos para usuários autenticados. Ele é baseado em uma arquitetura de microsserviços utilizando serviços da AWS, como Cognito, S3 e SQS, e um banco de dados Postgres para armazenamento relacional.
 
 ## 2. Arquitetura do Sistema
 
@@ -22,7 +22,7 @@ O sistema tem como objetivo gerenciar o upload, processamento e notificação de
 
 - SQS Process: Fila para gerenciar as mensagens de processamento de vídeo.
 
-- SQS Notification: Fila para envio de notificações aos usuários.
+- SQS Notification: Fila para disparar envio de notificações de erro ou sucesso aos usuários.
 
 - Banco de dados: Armazena informações sobre usuários e vídeos.
 
@@ -32,7 +32,11 @@ O sistema tem como objetivo gerenciar o upload, processamento e notificação de
 
 Funcionalidade: Autenticação via Cognito, upload de vídeos para o S3, registro no banco de dados, consumo de mensagens da fila SQS Notification e envio notificações (e-mail) aos usuários.
 
+POST /auth/login - Autenticar o usuário
+
 POST /upload - Envia vídeos para o S3
+
+POST /auth/accept-terms - Para aceite dos termos de serviço
 
 GET /videos - Lista vídeos do usuário 
 
@@ -47,8 +51,7 @@ Processo: Download do S3, processamento, upload do resultado e atualização do 
 
 ## 4. Modelagem de Dados
 
-?????????
-
+![modelagem](src/main/resources/modelagem_bd.png)
 
 ## 5. Fluxos de Trabalho
 
@@ -86,7 +89,7 @@ Processo: Download do S3, processamento, upload do resultado e atualização do 
 
 - Proteção de Endpoints: Apenas usuários autenticados podem acessar o sistema.
 
-- LGPD: Termo de Consentimento para Tratamento de Dados Pessoais
+- LGPD: O sistema apenas processa dados pessoais com base em consentimento explícito ou outras bases legais previstas na LGPD.
 
 ## 7. Escalabilidade e Resiliência
 
