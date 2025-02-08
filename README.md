@@ -8,9 +8,7 @@ O sistema tem como objetivo gerenciar o upload, processamento e notificação de
 
 ## 2. Arquitetura do Sistema
 
-Diagrama de Arquitetura
-
-(Inserir diagrama  aqui)
+![Diagrama de Arquitetura](diagrama.webp)
 
 ### Componentes Principais
 
@@ -38,6 +36,8 @@ POST /upload - Envia vídeos para o S3
 
 GET /videos - Lista vídeos do usuário 
 
+...
+
 ### 3.2 Service Process Video
 
 Funcionalidade: Consome mensagens da fila SQS Process, processa os vídeos e atualiza o status na fila.
@@ -48,6 +48,7 @@ Processo: Download do S3, processamento, upload do resultado e atualização do 
 ## 4. Modelagem de Dados
 
 ?????????
+
 
 ## 5. Fluxos de Trabalho
 
@@ -85,7 +86,7 @@ Processo: Download do S3, processamento, upload do resultado e atualização do 
 
 - Proteção de Endpoints: Apenas usuários autenticados podem acessar o sistema.
 
-- LGPD: ncdjvnjdfnvlkfdnl
+- LGPD: Termo de Consentimento para Tratamento de Dados Pessoais
 
 ## 7. Escalabilidade e Resiliência
 
