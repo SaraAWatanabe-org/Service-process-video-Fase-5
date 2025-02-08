@@ -40,7 +40,6 @@ POST /auth/accept-terms - Para aceite dos termos de serviço
 
 GET /videos - Lista vídeos do usuário 
 
-...
 
 ### 3.2 Service Process Video
 
