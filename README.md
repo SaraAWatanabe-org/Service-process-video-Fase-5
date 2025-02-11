@@ -129,4 +129,4 @@ Cobertura de Testes: Garantia de qualidade através de uma cobertura mínima de 
 
 ## 11. Entregáveis
 
-(Inserir aqui o link para o Vídeo)
+[(Link para o vídeo)](https://youtu.be/aV9FvLD9MXM?si=o1RhIxS-DkD1NHma)
